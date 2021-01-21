@@ -1,0 +1,36 @@
+    {% from 'partials/macro/form_error_field.html' import error_field %}
+    
+    {{ form.name.label }}
+    {{ form.name(class='form-control') }}
+    {{ error_field(form,'name') }}
+
+    {{ form.content.label }}
+    {{ form.content(class='form-control') }}
+    {{ error_field(form,'content') }}
+
+    {{ form.category.label }}
+    {{ form.category(class='form-control') }}
+    {{ error_field(form,'category') }}
+
+    {{ form.dimention.label }}
+    {{ form.dimention.x(class='form-control mt-1',placeholder='x') }}
+    {{ form.dimention.y(class='form-control mt-1',placeholder='y') }}
+    {{ form.dimention.z(class='form-control mt-1',placeholder='z') }}
+    {{ error_field(form,'dimention') }}
+
+    {{ form.csrf_token }}
+    {{ form.dimention.csrf_token }}
+
+    {{ form.errors }}
+
+    {{ addressForm.country.label }}
+    {{ addressForm.country(class='form-control') }}
+    {{ error_field(form,'country') }}
+
+    {{ addressForm.direction.label }}
+    {{ addressForm.direction(class='form-control') }}
+    {{ error_field(form,'direction') }}
+
+    {{ form.tags.label }}
+    {{ form.tags(class='form-control') }}
+    {{ error_field(form,'tags') }}

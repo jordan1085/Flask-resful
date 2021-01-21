@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="{{url_for('book.add')}}" method="post">
+
+    {% include "book/_form.html" %}
+
+
+    <button type="submit" class="btn btn-success mt-2"> <i class="fa fa-plus"></i> Enviar</button>
+</form>
+
+{% endblock %}

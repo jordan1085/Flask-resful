@@ -1,0 +1,92 @@
+<button class="btn btn-primary mt-3" data-toggle="modal" data-target="#saveModal"><i class="fa fa-plus"></i>
+  Crear</button>
+
+<div class="modal fade" id="saveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="saveForm" action="{{url_for('book.add')}}" add_action="{{url_for('book.add')}}"
+        update_action="{{url_for('book.update', id=0)}}" method="post">
+        <div class="modal-body">
+          {% include "book/_form.html" %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> Crear</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  
+  window.onload = function(){
+    saveBook()
+  }
+
+  function saveBook() {
+    var saveModal = document.getElementById('saveModal')
+    var saveForm = document.getElementById('saveForm')
+
+    if(document.querySelector("#saveModal .text-danger") != null){
+      var saveModalController = new bootstrap.Modal(saveModal)
+      saveModalController.show()
+    }
+
+    saveModal.addEventListener('show.bs.modal', function (event) {
+
+      var button = event.relatedTarget
+      // Extract info from data-* attributes
+
+      var id = button.getAttribute('data-id')
+      var name = button.getAttribute('data-name')
+
+      cleanForm()
+
+      if (id == null) {
+        // creacion
+        saveForm.setAttribute("action", saveForm.getAttribute("add_action"))
+        document.querySelector("#saveModal .modal-title").textContent = "Crear Libro"
+      } else {
+        //actualizacion
+        saveForm.setAttribute("action", saveForm.getAttribute("update_action").slice(0, -1) + id)
+        document.querySelector("#saveModal .modal-title").textContent = "Actualizar Libro: "+name
+        getInfoBook(id)
+      }
+
+    })
+  }
+
+  function cleanForm() {
+    document.querySelector('#saveForm [name=name]').value = ""
+    document.querySelector('#saveForm [name=content]').value = ""
+
+    document.querySelector('#saveForm [name=dimention-x]').value = ""
+    document.querySelector('#saveForm [name=dimention-y]').value = ""
+    document.querySelector('#saveForm [name=dimention-z]').value = ""
+
+    document.querySelectorAll('#saveForm [name=category] option')[0].selected="selected"
+  }
+
+  function getInfoBook(id) {
+    fetch('http://127.0.0.1:5000/book/get-detial-by-id/' + id)
+      .then(res => res.json())
+      .then(res => {
+        document.querySelector('#saveForm [name=name]').value = res.name
+        document.querySelector('#saveForm [name=content]').value = res.content
+        
+        document.querySelector('#saveForm [name=category] option[value="'+res.category.$oid+'"]').selected="selected"
+  
+        document.querySelector('#saveForm [name=dimention-x]').value = res.dimention.x
+        document.querySelector('#saveForm [name=dimention-y]').value = res.dimention.y
+        document.querySelector('#saveForm [name=dimention-z]').value = res.dimention.z
+
+      })
+  }
+</script>
